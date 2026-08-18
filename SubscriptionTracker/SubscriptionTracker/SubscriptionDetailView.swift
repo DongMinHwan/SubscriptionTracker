@@ -140,11 +140,14 @@ struct SubscriptionDetailView: View {
         subscription.amount = amount
         subscription.cycle = cycle
         subscription.nextPaymentDate = Calendar.current.startOfDay(for: nextPaymentDate)
+        subscription.rollForwardIfNeeded()
+        modelContext.saveAndRefreshWidgets()
         dismiss()
     }
 
     private func delete() {
         modelContext.delete(subscription)
+        modelContext.saveAndRefreshWidgets()
         dismiss()
     }
 }

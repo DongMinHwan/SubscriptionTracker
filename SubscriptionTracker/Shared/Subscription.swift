@@ -34,18 +34,26 @@ final class Subscription {
 }
 
 extension Subscription {
-    /// 다음 결제일이 오늘보다 과거면 주기만큼 밀어 오늘 이후로 맞춘다.
-    func rollForwardIfNeeded(now: Date = .now, calendar: Calendar = .current) {
+    /// 저장값을 건드리지 않고, 주기만큼 밀어 오늘 이후가 된 결제일을 계산한다.
+    /// 위젯처럼 읽기만 하는 곳은 저장을 할 수 없으므로 이 값을 쓴다.
+    func upcomingPaymentDate(now: Date = .now, calendar: Calendar = .current) -> Date {
         let today = calendar.startOfDay(for: now)
-        guard nextPaymentDate < today else { return }
+        guard nextPaymentDate < today else { return nextPaymentDate }
 
         let component: Calendar.Component = cycle == .month ? .month : .year
         var next = nextPaymentDate
         while next < today {
-            guard let advanced = calendar.date(byAdding: component, value: 1, to: next) else { return }
+            guard let advanced = calendar.date(byAdding: component, value: 1, to: next) else { return next }
             next = advanced
         }
-        nextPaymentDate = next
+        return next
+    }
+
+    /// 다음 결제일이 오늘보다 과거면 주기만큼 밀어 오늘 이후로 맞춘다.
+    func rollForwardIfNeeded(now: Date = .now, calendar: Calendar = .current) {
+        let upcoming = upcomingPaymentDate(now: now, calendar: calendar)
+        guard upcoming != nextPaymentDate else { return }
+        nextPaymentDate = upcoming
     }
 }
 

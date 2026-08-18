@@ -106,7 +106,7 @@ struct SubscriptionListView: View {
                 .font(DesignTokens.Typography.rowTitle)
                 .foregroundStyle(DesignTokens.Palette.text)
 
-            Text(DateFormat.monthDay(subscription.nextPaymentDate))
+            Text(DateFormat.dday(subscription.nextPaymentDate))
                 .font(DesignTokens.Typography.rowSubtitle)
                 .foregroundStyle(DesignTokens.Palette.textSecondary)
         }
@@ -170,8 +170,17 @@ struct SubscriptionListView: View {
     }
 
     private func rollForwardPastPayments() {
+        var didChange = false
         for subscription in subscriptions {
+            let before = subscription.nextPaymentDate
             subscription.rollForwardIfNeeded()
+            if subscription.nextPaymentDate != before {
+                didChange = true
+            }
+        }
+
+        if didChange {
+            modelContext.saveAndRefreshWidgets()
         }
     }
 }

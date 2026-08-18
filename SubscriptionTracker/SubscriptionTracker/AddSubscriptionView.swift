@@ -122,6 +122,13 @@ struct AddSubscriptionView: View {
             nextPaymentDate: nextPaymentDate
         )
         modelContext.insert(subscription)
+
+        // 앱을 처음 깔면 이미 쓰고 있는 구독부터 넣게 되고, 그때 손에 잡히는 날짜는
+        // 기억나는 지난 결제일이다. 여기서 다음 주기로 맞춰 두면 사용자가 "그럼 다음은
+        // 몇 월 며칠이지"를 계산하지 않아도 된다.
+        subscription.rollForwardIfNeeded()
+
+        modelContext.saveAndRefreshWidgets()
         dismiss()
     }
 }

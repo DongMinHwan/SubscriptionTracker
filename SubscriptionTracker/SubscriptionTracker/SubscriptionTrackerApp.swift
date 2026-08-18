@@ -10,18 +10,8 @@ import SwiftData
 
 @main
 struct SubscriptionTrackerApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Subscription.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    // 위젯도 같은 저장소를 읽어야 하므로 App Group 컨테이너를 쓴다.
+    let sharedModelContainer = SubscriptionStore.makeContainer()
 
     var body: some Scene {
         WindowGroup {

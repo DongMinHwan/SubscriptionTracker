@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 enum DesignTokens {
     enum Palette {
@@ -27,6 +28,18 @@ enum DesignTokens {
         static let rowAmount = Font.body                 // 17pt
         static let widgetLabel = Font.caption            // 12pt
         static let widgetValue = Font.title2.bold()      // 22pt
+        static let widgetValueLarge = Font.title.bold()  // 28pt
+        static let widgetName = Font.subheadline         // 15pt
+    }
+
+    /// 앱 본체는 preferredColorScheme(.light)로 고정돼 있지만, 위젯은 홈 화면 배경 위에
+    /// 놓이므로 시스템 설정을 따른다. 그래서 위젯 색만 라이트/다크 두 벌을 둔다.
+    enum Widget {
+        static let background = Color(light: 0xFFFFFF, dark: 0x1C1C1E)
+        static let text = Color(light: 0x1C1C1E, dark: 0xFFFFFF)
+        static let textSecondary = Color(light: 0x8E8E93, dark: 0x98989F)
+        static let accent = Color(light: 0x1F4E79, dark: 0x6FA8DC)
+        static let separator = Color(light: 0xC6C6C8, dark: 0x38383A)
     }
 
     enum Metrics {
@@ -60,6 +73,24 @@ extension Color {
             green: Double((hex >> 8) & 0xFF) / 255,
             blue: Double(hex & 0xFF) / 255,
             opacity: 1
+        )
+    }
+
+    /// 시스템 모드에 따라 값이 갈리는 색. 위젯 토큰에만 쓴다.
+    init(light: UInt32, dark: UInt32) {
+        self.init(UIColor { traits in
+            UIColor(hex: traits.userInterfaceStyle == .dark ? dark : light)
+        })
+    }
+}
+
+private extension UIColor {
+    convenience init(hex: UInt32) {
+        self.init(
+            red: CGFloat((hex >> 16) & 0xFF) / 255,
+            green: CGFloat((hex >> 8) & 0xFF) / 255,
+            blue: CGFloat(hex & 0xFF) / 255,
+            alpha: 1
         )
     }
 }

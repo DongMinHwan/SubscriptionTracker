@@ -9,6 +9,7 @@ DerivedData/
 # Python
 __pycache__/
 *.pyc
+.venv/
 # 임시 백업
 *.bak-*
 ~$*
