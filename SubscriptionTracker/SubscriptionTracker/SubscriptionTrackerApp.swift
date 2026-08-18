@@ -27,7 +27,6 @@ struct SubscriptionTrackerApp: App {
         WindowGroup {
             SubscriptionListView()
                 .preferredColorScheme(.light)
-                .dynamicTypeSize(.large)
         }
         .modelContainer(sharedModelContainer)
     }

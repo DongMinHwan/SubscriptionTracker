@@ -9,6 +9,7 @@ import SwiftData
 struct SubscriptionListView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     @Query(sort: [
         SortDescriptor(\Subscription.nextPaymentDate, order: .forward),
@@ -100,24 +101,39 @@ struct SubscriptionListView: View {
     }
 
     private func row(for subscription: Subscription) -> some View {
-        HStack(spacing: DesignTokens.Metrics.screenPaddingH) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(subscription.name)
-                    .font(DesignTokens.Typography.rowTitle)
-                    .foregroundStyle(DesignTokens.Palette.text)
-
-                Text(DateFormat.monthDay(subscription.nextPaymentDate))
-                    .font(DesignTokens.Typography.rowSubtitle)
-                    .foregroundStyle(DesignTokens.Palette.textSecondary)
-            }
-
-            Spacer(minLength: 0)
-
-            Text(AmountFormat.won(subscription.amount))
-                .font(DesignTokens.Typography.rowAmount)
+        let nameAndDate = VStack(alignment: .leading, spacing: 2) {
+            Text(subscription.name)
+                .font(DesignTokens.Typography.rowTitle)
                 .foregroundStyle(DesignTokens.Palette.text)
+
+            Text(DateFormat.monthDay(subscription.nextPaymentDate))
+                .font(DesignTokens.Typography.rowSubtitle)
+                .foregroundStyle(DesignTokens.Palette.textSecondary)
         }
-        .frame(height: DesignTokens.Metrics.rowHeight)
+
+        let amount = Text(AmountFormat.won(subscription.amount))
+            .font(DesignTokens.Typography.rowAmount)
+            .foregroundStyle(DesignTokens.Palette.text)
+            .lineLimit(1)
+
+        // 글자를 아주 크게 쓰면 이름과 금액이 한 줄에 안 들어가 금액이 중간에서
+        // 잘린다. 그때는 가로 배치를 포기하고 세로로 쌓는다.
+        return Group {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 4) {
+                    nameAndDate
+                    amount
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack(spacing: DesignTokens.Metrics.screenPaddingH) {
+                    nameAndDate
+                    Spacer(minLength: 0)
+                    amount
+                }
+            }
+        }
+        .frame(minHeight: DesignTokens.Metrics.rowHeight)
     }
 
     private var emptyContent: some View {

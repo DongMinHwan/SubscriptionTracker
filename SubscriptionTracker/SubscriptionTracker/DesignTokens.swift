@@ -16,14 +16,17 @@ enum DesignTokens {
         static let destructive = Color(hex: 0xFF3B30)
     }
 
+    /// Font.system(size:)는 고정 크기라 사용자의 글자 크기 설정을 무시한다.
+    /// 기본 크기가 기획서 pt 값과 같은 텍스트 스타일을 써서, 기본 상태의 모양은
+    /// 그대로 두면서 사용자가 글자를 키우면 같이 커지게 한다.
     enum Typography {
-        static let totalLabel = Font.system(size: 13, weight: .regular)
-        static let totalValue = Font.system(size: 34, weight: .bold)
-        static let rowTitle = Font.system(size: 17, weight: .regular)
-        static let rowSubtitle = Font.system(size: 13, weight: .regular)
-        static let rowAmount = Font.system(size: 17, weight: .regular)
-        static let widgetLabel = Font.system(size: 12, weight: .regular)
-        static let widgetValue = Font.system(size: 22, weight: .bold)
+        static let totalLabel = Font.footnote            // 13pt
+        static let totalValue = Font.largeTitle.bold()   // 34pt
+        static let rowTitle = Font.body                  // 17pt
+        static let rowSubtitle = Font.footnote           // 13pt
+        static let rowAmount = Font.body                 // 17pt
+        static let widgetLabel = Font.caption            // 12pt
+        static let widgetValue = Font.title2.bold()      // 22pt
     }
 
     enum Metrics {
