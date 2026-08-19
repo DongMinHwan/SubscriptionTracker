@@ -36,6 +36,14 @@ enum DateFormat {
         formatter.string(from: date)
     }
 
+    /// 8월 구독 금액
+    ///
+    /// "이번 달"이라고만 하면 이미 나간 돈까지 세는 것처럼 읽힌다. 이 합계는 그 달 안에
+    /// 결제일이 남아 있는 구독만 더하므로, 달을 못박아 오해할 자리를 줄인다.
+    static func monthlyTotalLabel(_ date: Date = .now, calendar: Calendar = .current) -> String {
+        "\(calendar.component(.month, from: date))월 구독 금액"
+    }
+
     /// D-9 / D-DAY
     ///
     /// 날짜를 그대로 적으면 오늘이 며칠인지 떠올려 빼야 한다. 이 앱에서 날짜를 보는

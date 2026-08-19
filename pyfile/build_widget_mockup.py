@@ -9,7 +9,7 @@ import os
 
 from PIL import Image, ImageDraw, ImageFont
 
-OUT_DIR = "/Users/hwangdongmin/Projects/NewProject_1/기획서/v1.1.0/이미지"
+OUT_DIR = "/Users/hwangdongmin/Projects/NewProject_1/기획서/보류/위젯/이미지"
 FONT_PATH = "/System/Library/Fonts/AppleSDGothicNeo.ttc"
 
 SCALE = 3

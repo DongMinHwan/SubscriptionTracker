@@ -16,6 +16,7 @@ struct SubscriptionDetailView: View {
     @State private var amountText: String
     @State private var cycle: BillingCycle
     @State private var nextPaymentDate: Date
+    @State private var colorIndex: Int
     @State private var isDeleteAlertPresented = false
 
     init(subscription: Subscription) {
@@ -24,6 +25,7 @@ struct SubscriptionDetailView: View {
         _amountText = State(initialValue: String(subscription.amount))
         _cycle = State(initialValue: subscription.cycle)
         _nextPaymentDate = State(initialValue: subscription.nextPaymentDate)
+        _colorIndex = State(initialValue: subscription.colorIndex)
     }
 
     private var trimmedName: String {
@@ -101,6 +103,12 @@ struct SubscriptionDetailView: View {
                 )
                 .font(DesignTokens.Typography.rowTitle)
                 .foregroundStyle(DesignTokens.Palette.text)
+
+                IconColorPicker(
+                    name: trimmedName,
+                    automaticIndex: subscription.resolvedColorIndex,
+                    colorIndex: $colorIndex
+                )
             }
 
             Section {
@@ -136,18 +144,23 @@ struct SubscriptionDetailView: View {
     private func save() {
         guard isValid else { return }
 
+        // 예전에 만든 구독은 색이 -1이라 이름에서 색이 나온다. 이름을 고치기 전에 읽어야
+        // 지금 화면에 보이던 색이 그대로 남는다.
+        let resolvedColor = colorIndex >= 0 ? colorIndex : subscription.resolvedColorIndex
+
         subscription.name = trimmedName
         subscription.amount = amount
         subscription.cycle = cycle
         subscription.nextPaymentDate = Calendar.current.startOfDay(for: nextPaymentDate)
+        subscription.colorIndex = resolvedColor
         subscription.rollForwardIfNeeded()
-        modelContext.saveAndRefreshWidgets()
+        modelContext.saveAndRefresh()
         dismiss()
     }
 
     private func delete() {
         modelContext.delete(subscription)
-        modelContext.saveAndRefreshWidgets()
+        modelContext.saveAndRefresh()
         dismiss()
     }
 }

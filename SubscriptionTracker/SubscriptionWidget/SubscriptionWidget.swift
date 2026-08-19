@@ -148,7 +148,7 @@ struct SubscriptionWidgetEntryView: View {
     /// 앱은 오늘 것이 이미 결제됐는지 알 수 없으므로, 작은 위젯은 금액만 말한다.
     private var small: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("이번 달")
+            Text(DateFormat.monthlyTotalLabel(entry.date))
                 .font(DesignTokens.Typography.widgetLabel)
                 .foregroundStyle(DesignTokens.Widget.textSecondary)
 
@@ -182,7 +182,7 @@ struct SubscriptionWidgetEntryView: View {
             .foregroundStyle(DesignTokens.Widget.textSecondary)
         } else if entry.hasSubscriptions {
             // 구독은 있는데 전부 다른 달에 결제되는 경우. 0원이라고만 두면 고장으로 보인다.
-            Text("이번 달 결제 없음")
+            Text("남은 결제 없음")
                 .font(DesignTokens.Typography.widgetLabel)
                 .foregroundStyle(DesignTokens.Widget.textSecondary)
         } else {
@@ -196,7 +196,7 @@ struct SubscriptionWidgetEntryView: View {
     private var medium: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Text("이번 달")
+                Text(DateFormat.monthlyTotalLabel(entry.date))
                     .font(DesignTokens.Typography.widgetLabel)
                     .foregroundStyle(DesignTokens.Widget.textSecondary)
 

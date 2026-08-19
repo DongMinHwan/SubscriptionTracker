@@ -47,17 +47,17 @@ struct SubscriptionListView: View {
                 AddSubscriptionView()
             }
         }
-        .onAppear(perform: rollForwardPastPayments)
+        .onAppear(perform: catchUp)
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
-                rollForwardPastPayments()
+                catchUp()
             }
         }
     }
 
     private var totalSection: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("이번 달")
+            Text(DateFormat.monthlyTotalLabel())
                 .font(DesignTokens.Typography.totalLabel)
                 .foregroundStyle(DesignTokens.Palette.textSecondary)
 
@@ -118,18 +118,27 @@ struct SubscriptionListView: View {
 
         // 글자를 아주 크게 쓰면 이름과 금액이 한 줄에 안 들어가 금액이 중간에서
         // 잘린다. 그때는 가로 배치를 포기하고 세로로 쌓는다.
+        let icon = SubscriptionIcon(subscription: subscription)
+
         return Group {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: 4) {
-                    nameAndDate
+                    HStack(spacing: DesignTokens.Metrics.iconGap) {
+                        icon
+                        nameAndDate
+                    }
                     amount
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else {
-                HStack(spacing: DesignTokens.Metrics.screenPaddingH) {
-                    nameAndDate
-                    Spacer(minLength: 0)
-                    amount
+                HStack(spacing: DesignTokens.Metrics.iconGap) {
+                    icon
+
+                    HStack(spacing: DesignTokens.Metrics.screenPaddingH) {
+                        nameAndDate
+                        Spacer(minLength: 0)
+                        amount
+                    }
                 }
             }
         }
@@ -169,7 +178,17 @@ struct SubscriptionListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
-    private func rollForwardPastPayments() {
+    /// 앱이 앞으로 나올 때마다 밀린 것을 따라잡는다.
+    private func catchUp() {
+        let rolled = rollForwardPastPayments()
+        let colored = assignMissingColors()
+
+        if rolled || colored {
+            modelContext.saveAndRefresh()
+        }
+    }
+
+    private func rollForwardPastPayments() -> Bool {
         var didChange = false
         for subscription in subscriptions {
             let before = subscription.nextPaymentDate
@@ -178,10 +197,20 @@ struct SubscriptionListView: View {
                 didChange = true
             }
         }
+        return didChange
+    }
 
-        if didChange {
-            modelContext.saveAndRefreshWidgets()
+    /// 아이콘 색이 생기기 전에 만든 구독을 채운다. 이미 쓰이고 있는 색을 피해서 준다.
+    private func assignMissingColors() -> Bool {
+        let missing = subscriptions.filter { $0.colorIndex < 0 }
+        guard !missing.isEmpty else { return false }
+
+        var assigned = subscriptions.filter { $0.colorIndex >= 0 }
+        for subscription in missing {
+            subscription.colorIndex = Subscription.suggestedColorIndex(existing: assigned)
+            assigned.append(subscription)
         }
+        return true
     }
 }
 

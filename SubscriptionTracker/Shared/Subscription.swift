@@ -25,11 +25,22 @@ final class Subscription {
     var cycle: BillingCycle
     var nextPaymentDate: Date
 
-    init(name: String, amount: Int, cycle: BillingCycle, nextPaymentDate: Date, calendar: Calendar = .current) {
+    /// 아이콘 색. -1이면 이름에서 자동으로 정하고, 사용자가 고르면 0 이상이 들어간다.
+    var colorIndex: Int = -1
+
+    init(
+        name: String,
+        amount: Int,
+        cycle: BillingCycle,
+        nextPaymentDate: Date,
+        colorIndex: Int = -1,
+        calendar: Calendar = .current
+    ) {
         self.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
         self.amount = amount
         self.cycle = cycle
         self.nextPaymentDate = calendar.startOfDay(for: nextPaymentDate)
+        self.colorIndex = colorIndex
     }
 }
 

@@ -10,10 +10,13 @@ struct AddSubscriptionView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
+    @Query private var subscriptions: [Subscription]
+
     @State private var name = ""
     @State private var amountText = ""
     @State private var cycle: BillingCycle = .month
     @State private var nextPaymentDate = Calendar.current.startOfDay(for: .now)
+    @State private var colorIndex = -1
 
     private var trimmedName: String {
         name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -25,6 +28,10 @@ struct AddSubscriptionView: View {
 
     private var isValid: Bool {
         !trimmedName.isEmpty && amount >= 1
+    }
+
+    private var automaticColorIndex: Int {
+        Subscription.suggestedColorIndex(existing: subscriptions)
     }
 
     var body: some View {
@@ -90,6 +97,12 @@ struct AddSubscriptionView: View {
                 )
                 .font(DesignTokens.Typography.rowTitle)
                 .foregroundStyle(DesignTokens.Palette.text)
+
+                IconColorPicker(
+                    name: trimmedName,
+                    automaticIndex: automaticColorIndex,
+                    colorIndex: $colorIndex
+                )
             }
             .navigationTitle("구독 추가")
             .navigationBarTitleDisplayMode(.inline)
@@ -119,7 +132,8 @@ struct AddSubscriptionView: View {
             name: trimmedName,
             amount: amount,
             cycle: cycle,
-            nextPaymentDate: nextPaymentDate
+            nextPaymentDate: nextPaymentDate,
+            colorIndex: colorIndex >= 0 ? colorIndex : automaticColorIndex
         )
         modelContext.insert(subscription)
 
@@ -128,7 +142,7 @@ struct AddSubscriptionView: View {
         // 몇 월 며칠이지"를 계산하지 않아도 된다.
         subscription.rollForwardIfNeeded()
 
-        modelContext.saveAndRefreshWidgets()
+        modelContext.saveAndRefresh()
         dismiss()
     }
 }

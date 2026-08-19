@@ -15,6 +15,18 @@ enum DesignTokens {
         static let accent = Color(hex: 0x1F4E79)
         static let separator = Color(hex: 0xC6C6C8)
         static let destructive = Color(hex: 0xFF3B30)
+
+        /// 구독 아이콘 배경. 흰 글자가 얹혔을 때 읽히는 선에서 서로 구분되는 여덟 가지.
+        static let iconColors: [Color] = [
+            Color(hex: 0xE53935),
+            Color(hex: 0xF9A825),
+            Color(hex: 0x43A047),
+            Color(hex: 0x00897B),
+            Color(hex: 0x1E88E5),
+            Color(hex: 0x5E35B1),
+            Color(hex: 0xD81B60),
+            Color(hex: 0x6D4C41)
+        ]
     }
 
     /// Font.system(size:)는 고정 크기라 사용자의 글자 크기 설정을 무시한다.
@@ -30,6 +42,9 @@ enum DesignTokens {
         static let widgetValue = Font.title2.bold()      // 22pt
         static let widgetValueLarge = Font.title.bold()  // 28pt
         static let widgetName = Font.subheadline         // 15pt
+
+        /// 아이콘 머리글자만 고정 크기다. 사각형은 그대로인데 글자만 커지면 밖으로 넘친다.
+        static let iconInitial = Font.system(size: 17, weight: .bold)
     }
 
     /// 앱 본체는 preferredColorScheme(.light)로 고정돼 있지만, 위젯은 홈 화면 배경 위에
@@ -48,6 +63,9 @@ enum DesignTokens {
         static let totalPaddingV: CGFloat = 24
         static let cornerCard: CGFloat = 12
         static let cornerButton: CGFloat = 10
+        static let iconSize: CGFloat = 36
+        static let iconCorner: CGFloat = 10
+        static let iconGap: CGFloat = 12
     }
 
     /// 런치스크린은 앱 코드가 실행되기 전에 시스템이 그리므로, 실제 값은

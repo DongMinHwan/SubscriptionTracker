@@ -15,7 +15,7 @@ struct SubscriptionTrackerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            SubscriptionListView()
+            RootView()
                 .preferredColorScheme(.light)
         }
         .modelContainer(sharedModelContainer)
