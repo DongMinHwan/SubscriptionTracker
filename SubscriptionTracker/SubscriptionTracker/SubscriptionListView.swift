@@ -47,7 +47,15 @@ struct SubscriptionListView: View {
                 AddSubscriptionView()
             }
         }
-        .onAppear(perform: catchUp)
+        .onAppear {
+            #if DEBUG
+            seedForScreenshotIfNeeded()
+            if ScreenshotLaunch.add {
+                isAddPresented = true
+            }
+            #endif
+            catchUp()
+        }
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 catchUp()
@@ -177,6 +185,20 @@ struct SubscriptionListView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+
+    #if DEBUG
+    private func seedForScreenshotIfNeeded() {
+        guard ScreenshotLaunch.seed, subscriptions.isEmpty else { return }
+
+        var existing: [Subscription] = []
+        for sample in PreviewData.samples() {
+            sample.colorIndex = Subscription.suggestedColorIndex(existing: existing)
+            modelContext.insert(sample)
+            existing.append(sample)
+        }
+        try? modelContext.save()
+    }
+    #endif
 
     /// 앱이 앞으로 나올 때마다 밀린 것을 따라잡는다.
     private func catchUp() {

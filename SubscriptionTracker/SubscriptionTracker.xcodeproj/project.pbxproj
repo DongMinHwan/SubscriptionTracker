@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		EF50D92030348E9800267E2F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF50D91F30348E9800267E2F /* WidgetKit.framework */; };
 		EF50D92230348E9800267E2F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF50D92130348E9800267E2F /* SwiftUI.framework */; };
+		EF50D92D30348E9A00267E2F /* SubscriptionWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EF50D91D30348E9800267E2F /* SubscriptionWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				EF50D92D30348E9A00267E2F /* SubscriptionWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -381,7 +383,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SubscriptionTracker/SubscriptionTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 85K9VD9L96;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -414,7 +416,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SubscriptionTracker/SubscriptionTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 85K9VD9L96;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

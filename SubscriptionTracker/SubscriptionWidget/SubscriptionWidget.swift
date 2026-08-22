@@ -269,8 +269,8 @@ struct SubscriptionWidget: Widget {
             SubscriptionWidgetEntryView(entry: entry)
                 .containerBackground(DesignTokens.Widget.background, for: .widget)
         }
-        .configurationDisplayName("이번 달 구독")
-        .description("이번 달 고정지출 합계와 다음 결제를 보여줍니다.")
+        .configurationDisplayName("구독 금액")
+        .description("이번 달 안에 나갈 구독 합계와 다음 결제를 보여줍니다.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
